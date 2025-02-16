@@ -5,22 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Race Prediction</title>
     <style>
+        /* Global Styling */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
             text-align: center;
-            padding: 20px;
+            padding: 50px 20px;
+            color: #fff;
         }
+        
         .container {
-            width: 40%;
-            margin: auto;
+            max-width: 400px;
             background: white;
+            color: #333;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0px 0px 5px rgba(37, 117, 252, 0.5);
+        }
+
+        .btn {
+            width: 100%;
+            background: #2575fc;
+            color: white;
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background: #6a11cb;
+        }
+
+        /* Popup Modal */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #333;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 350px;
         }
-        .btn { background-color: #28a745; color: white; padding: 10px; border: none; cursor: pointer; }
+
+        .popup h3 {
+            margin-bottom: 15px;
+        }
+
+        .popup .close-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .popup .close-btn:hover {
+            background: #a71d2a;
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #222;
+                color: #ddd;
+            }
+            .container {
+                background: #333;
+                color: #fff;
+            }
+            input {
+                background: #444;
+                color: #fff;
+                border: 2px solid #666;
+            }
+            .btn {
+                background: #4CAF50;
+            }
+            .popup {
+                background: #444;
+                color: #fff;
+            }
+        }
     </style>
+
     <script>
         function predictRace(event) {
             event.preventDefault();
@@ -28,26 +135,43 @@
 
             fetch('/predict', { method: 'POST', body: formData })
             .then(response => response.json())
-            .then(data => alert("Predicted Race/Ethnicity: " + data.prediction))
-            .catch(error => alert("Error: Unable to get prediction."));
+            .then(data => {
+                document.getElementById("popup-message").innerText = "Predicted Race/Ethnicity: " + data.prediction;
+                document.getElementById("popup").style.display = "block";
+            })
+            .catch(error => {
+                alert("Error: Unable to get prediction.");
+            });
+        }
+
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
         }
     </script>
 </head>
 <body>
+
     <div class="container">
         <h2>Predict Student Race/Ethnicity</h2>
         <form id="predictionForm" onsubmit="predictRace(event)">
-            <label>Math Score:</label>
-            <input type="number" name="math_score" required><br>
+            <label for="math_score">Math Score:</label>
+            <input type="number" id="math_score" name="math_score" required>
 
-            <label>Reading Score:</label>
-            <input type="number" name="reading_score" required><br>
+            <label for="reading_score">Reading Score:</label>
+            <input type="number" id="reading_score" name="reading_score" required>
 
-            <label>Writing Score:</label>
-            <input type="number" name="writing_score" required><br>
+            <label for="writing_score">Writing Score:</label>
+            <input type="number" id="writing_score" name="writing_score" required>
 
             <button type="submit" class="btn">Predict</button>
         </form>
     </div>
+
+    <!-- Prediction Popup -->
+    <div id="popup" class="popup">
+        <h3 id="popup-message"></h3>
+        <button class="close-btn" onclick="closePopup()">Close</button>
+    </div>
+
 </body>
 </html>
