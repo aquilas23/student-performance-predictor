@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Race Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            width: 40%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn { background-color: #28a745; color: white; padding: 10px; border: none; cursor: pointer; }
+    </style>
+    <script>
+        function predictRace(event) {
+            event.preventDefault();
+            let formData = new FormData(document.getElementById("predictionForm"));
+
+            fetch('/predict', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => alert("Predicted Race/Ethnicity: " + data.prediction))
+            .catch(error => alert("Error: Unable to get prediction."));
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Predict Student Race/Ethnicity</h2>
+        <form id="predictionForm" onsubmit="predictRace(event)">
+            <label>Math Score:</label>
+            <input type="number" name="math_score" required><br>
+
+            <label>Reading Score:</label>
+            <input type="number" name="reading_score" required><br>
+
+            <label>Writing Score:</label>
+            <input type="number" name="writing_score" required><br>
+
+            <button type="submit" class="btn">Predict</button>
+        </form>
+    </div>
+</body>
+</html>
