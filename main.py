@@ -33,4 +33,4 @@ model.fit(X_train, y_train)
 with open("model/student_performance_model.pkl", "wb") as f:
     pickle.dump((scaler, label_encoder, model), f)
 
-print("✅ Model training completed and saved.")
+print("Model training completed and saved.")
