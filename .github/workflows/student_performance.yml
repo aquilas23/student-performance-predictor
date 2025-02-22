@@ -33,6 +33,7 @@ jobs:
         run: |
           echo "machine api.heroku.com login=oauth password=$HEROKU_API_KEY" > ~/.netrc
           echo "machine git.heroku.com login=oauth password=$HEROKU_API_KEY" >> ~/.netrc
+          chmod 600 ~/.netrc  # Secure permissions
           heroku auth:whoami  # Verify authentication
 
       - name: Deploy to Heroku
